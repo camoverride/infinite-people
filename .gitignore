@@ -1,0 +1,9 @@
+*.avi
+*.mp4
+*.jpg
+*.dat
+*.pt
+*.pth
+.venv
+output_frames
+yolact/*
