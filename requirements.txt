@@ -7,6 +7,7 @@ networkx==3.3
 numpy==2.0.1
 opencv-python==4.10.0.84
 pillow==10.4.0
+PyYAML==6.0.2
 setuptools==72.2.0
 sympy==1.13.2
 torch==2.4.0

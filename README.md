@@ -2,16 +2,27 @@
 
 ## Setup Wifi Camera
 
+TODO: include tips for getting the RTSP stream IP address... It's tricky...
+
+
+## Setup
+
+- `pip install -r requirements.txt`
+- `mkdir composites`
+
 
 ## Test
 
-There must be a `new_video.dat` and at least one `*.dat` file in `composites/`
-
 Generate new composite masks:
-- `python generate_and_overlay.py`
+- `python generate_composites.py`
 
 Stream the video with the composites looping:
-- `python stream_combine.py`
+- `python stream_video.py`
+
+
+## Run
+
+- systemd service, etc.
 
 
 ## TODO:
