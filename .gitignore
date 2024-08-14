@@ -1,3 +1,4 @@
 old
 *.dat
 *.mp4
+.venv
