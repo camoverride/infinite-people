@@ -1,11 +1,14 @@
 import numpy as np
 import cv2
 
+
+
 def get_num_frames(memmap_file, height, width, channels=3):
     # Calculate the number of frames based on the size of the memmap file
     file_size = np.memmap(memmap_file, dtype='uint8', mode='r').shape[0]
     frame_size = height * width * channels
     return file_size // frame_size
+
 
 def stream_and_overlay(rtsp_url, overlay_memmap_file, height, width, channels=3):
     # Open the RTSP stream
@@ -62,9 +65,11 @@ def stream_and_overlay(rtsp_url, overlay_memmap_file, height, width, channels=3)
     cap.release()
     cv2.destroyAllWindows()
 
+
+
 if __name__ == "__main__":
     rtsp_url = "rtsp://admin:admin123@192.168.0.109:554/live"
-    overlay_memmap_file = 'overlayed_video_a.dat'
+    overlay_memmap_file = "overlayed_video_a.dat"
     height = 1440
     width = 2560
 
