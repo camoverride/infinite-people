@@ -2,11 +2,19 @@
 
 ## Setup Wifi Camera
 
-How to get the RTSP address:
+
+## Test
+
+There must be a `new_video.dat` and at least one `*.dat` file in `composites/`
+
+Generate new composite masks:
+- `python generate_and_overlay.py`
+
+Stream the video with the composites looping:
+- `python stream_combine.py`
 
 
-rtsp://admin:admin123@192.168.12.157:554/live
+## TODO:
 
-
-rtsp://[username]:password@IPaddress:554/cam/realmonitor?channel=1&subtype=0
-https://support.amcrest.com/hc/en-us/articles/360052688931-Accessing-Amcrest-Products-Using-RTSP
+- no need for mask.dat files
+- try to optimize mask overlay with tensorflow for Coral

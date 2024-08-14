@@ -1,27 +1,52 @@
-import numpy as np
+import time
 import cv2
+import numpy as np
+from image_utils import get_most_recent_file
 
 
 
 def get_num_frames(memmap_file, height, width, channels=3):
-    # Calculate the number of frames based on the size of the memmap file
+    """
+    Calculate the number of frames based on the size of the memmap file.
+    """
     file_size = np.memmap(memmap_file, dtype='uint8', mode='r').shape[0]
     frame_size = height * width * channels
+
     return file_size // frame_size
 
 
-def stream_and_overlay(rtsp_url, overlay_memmap_file, height, width, channels=3):
-    # Open the RTSP stream
+def load_overlay_file(overlay_memmap_file, height, width, channels):
+    """
+    Load the memmap file with overlay frames
+    """
+    num_overlay_frames = get_num_frames(overlay_memmap_file, height, width, channels)
+    overlay_frames = np.memmap(overlay_memmap_file,
+                               dtype='uint8',
+                               mode='r',
+                               shape=(num_overlay_frames, height, width, channels))
+    
+    return overlay_frames, num_overlay_frames
+
+
+def stream_and_overlay(rtsp_url, height, width, composites_dir, channels=3):
+    """
+    Open an RTSP stream and overlay the frames with frames from the `composites_dir`.
+    The composites should be created from frames from the same camera in the same
+    position (the camera must be stationary).
+    """
     cap = cv2.VideoCapture(rtsp_url)
 
     if not cap.isOpened():
         print("Error: Could not open RTSP stream.")
         return
-
-    # Load the memmap file with overlay frames
-    num_overlay_frames = get_num_frames(overlay_memmap_file, height, width, channels)
-    overlay_frames = np.memmap(overlay_memmap_file, dtype='uint8', mode='r', shape=(num_overlay_frames, height, width, channels))
-
+    
+    overlay_memmap_file = get_most_recent_file(composites_dir)
+    print(f"Overlaying video stream with: {overlay_memmap_file}")
+    overlay_frames, num_overlay_frames = load_overlay_file(overlay_memmap_file,
+                                                           height,
+                                                           width,
+                                                           channels)
+    
     overlay_index = 0
 
     while True:
@@ -30,9 +55,6 @@ def stream_and_overlay(rtsp_url, overlay_memmap_file, height, width, channels=3)
         if not ret:
             print("Error: Could not read frame from RTSP stream.")
             break
-
-        # Resize the RTSP frame to match the overlay size if necessary
-        # rtsp_frame = cv2.resize(rtsp_frame, (width, height))
 
         # Get the current overlay frame
         overlay_frame = overlay_frames[overlay_index]
@@ -54,12 +76,30 @@ def stream_and_overlay(rtsp_url, overlay_memmap_file, height, width, channels=3)
         # Display the combined frame
         cv2.imshow("Combined Frame", combined_frame)
 
-        # Increment the overlay index and loop back to the start if necessary
-        overlay_index = (overlay_index + 1) % num_overlay_frames
+        # Increment the overlay index
+        overlay_index += 1
+        
+        # Check if we've exhausted the current overlay frames
+        if overlay_index >= num_overlay_frames:
+            # Reset the index
+            overlay_index = 0
+            
+            # Check for a new most recent file
+            new_overlay_memmap_file = get_most_recent_file("composites")
+            if new_overlay_memmap_file != overlay_memmap_file:
+                print(f"Switching to new overlay file: {new_overlay_memmap_file}")
+                overlay_memmap_file = new_overlay_memmap_file
+                overlay_frames, num_overlay_frames = load_overlay_file(overlay_memmap_file,
+                                                                       height,
+                                                                       width,
+                                                                       channels)
 
         # Break the loop if ESC is pressed
         if cv2.waitKey(1) == 27:  # 27 is the ASCII code for ESC
             break
+
+        # Short delay to allow for checking the new most recent file periodically
+        time.sleep(0.01)
 
     # Release resources
     cap.release()
@@ -69,8 +109,8 @@ def stream_and_overlay(rtsp_url, overlay_memmap_file, height, width, channels=3)
 
 if __name__ == "__main__":
     rtsp_url = "rtsp://admin:admin123@192.168.0.109:554/live"
-    overlay_memmap_file = "overlayed_video_a.dat"
     height = 1440
     width = 2560
+    composites_dir = "composites"
 
-    stream_and_overlay(rtsp_url, overlay_memmap_file, height, width)
+    stream_and_overlay(rtsp_url, height, width, composites_dir)

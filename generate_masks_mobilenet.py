@@ -13,11 +13,15 @@ from tqdm import tqdm
 from torchvision import models
 import torch
 from torchvision import transforms
-import time
 
 
 
 def create_masks(path_to_video_file, output_frame_memmaps, output_frame_mask_memmaps):
+    """
+    Create maskes video frames saved as memmaps for fast I/O operations.
+
+    TODO: `output_frame_mask_memmaps` are not used and can be removed.
+    """
     # Load the DeepLabV3 model pre-trained on COCO dataset
     model = models.segmentation.deeplabv3_mobilenet_v3_large(pretrained=True).eval()
 
@@ -103,48 +107,27 @@ def create_masks(path_to_video_file, output_frame_memmaps, output_frame_mask_mem
     print(f"Masks saved to {output_frame_mask_memmaps}")
 
 
-def display_memmap_frames(memmap_file, num_frames, height, width, channels=3):
-    # Load the memmap array with the correct shape
-    frames = np.memmap(memmap_file, dtype='uint8', mode='r', shape=(num_frames, height, width, channels))
-
-    for i in range(num_frames):
-        # Read the frame from the memmap array
-        frame = frames[i]
-
-        # Display the frame (no need to swap channels if they are in BGR format)
-        cv2.imshow("Frame", frame)
-
-        # Wait a short duration (0.01 seconds) before showing the next frame
-        time.sleep(0.01)
-
-        # Break the loop if ESC is pressed
-        if cv2.waitKey(1) == 27:  # 27 is the ASCII code for ESC
-            break
-
-    # Close all windows
-    cv2.destroyAllWindows()
-
-
 
 if __name__ == "__main__":
     # Example usage
+    pass
 
     # Get the memmaps for the first video
-    create_masks(path_to_video_file='output_video_1.mp4',
-                output_frame_memmaps='output_video_1.dat',
-                output_frame_mask_memmaps='output_video_1_mask.dat')
+    # create_masks(path_to_video_file="new_video.mp4",
+    #             output_frame_memmaps="new_video.dat",
+    #             output_frame_mask_memmaps="new_video_mask.dat")
 
-    display_memmap_frames(memmap_file='output_video_1.dat',
-                        num_frames=322,
-                        height=1440,
-                        width=2560)
+    # display_memmap_frames(memmap_file='output_video_1.dat',
+    #                     num_frames=322,
+    #                     height=1440,
+    #                     width=2560)
 
-    # Get the memmaps for the second video
-    create_masks(path_to_video_file='output_video_2.mp4',
-                output_frame_memmaps='output_video_2.dat',
-                output_frame_mask_memmaps='output_video_2_mask.dat')
+    # # Get the memmaps for the second video
+    # create_masks(path_to_video_file='output_video_2.mp4',
+    #             output_frame_memmaps='output_video_2.dat',
+    #             output_frame_mask_memmaps='output_video_2_mask.dat')
 
-    display_memmap_frames(memmap_file='output_video_2.dat',
-                        num_frames=321,
-                        height=1440,
-                        width=2560)
+    # display_memmap_frames(memmap_file='output_video_2.dat',
+    #                     num_frames=321,
+    #                     height=1440,
+    #                     width=2560)
