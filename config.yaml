@@ -1,0 +1,5 @@
+rtsp_url: rtsp://admin:admin123@192.168.0.109:554/live
+height: 1440
+width: 2560
+duration: 5 # seconds
+fps: 30
