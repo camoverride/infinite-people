@@ -105,6 +105,25 @@ def display_memmap_frames(memmap_file, height, width, channels=3):
     cv2.destroyAllWindows()
 
 
+def get_video_properties(video_path):
+    # Open the video file
+    cap = cv2.VideoCapture(video_path)
+    
+    if not cap.isOpened():
+        print(f"Error: Cannot open video file {video_path}")
+        return None
+    
+    # Get video properties
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+    # Release the video capture object
+    cap.release()
+    
+    return width, height, num_frames
+
+
 
 if __name__ == "__main__":
     rtsp_url = "rtsp://admin:admin123@192.168.0.109:554/live"

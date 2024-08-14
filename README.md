@@ -18,3 +18,8 @@ Stream the video with the composites looping:
 
 - no need for mask.dat files
 - try to optimize mask overlay with tensorflow for Coral
+- video files need to be created before `python stream_combine.py` is run
+- clear out extra composite files
+
+- get to run on desktop
+- experiment with running on Pi with coral

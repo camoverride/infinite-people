@@ -78,8 +78,7 @@ if __name__ == "__main__":
         most_recent_composite = get_most_recent_file(COMPOSITES_DIR)
         output_memmap_path = f"{COMPOSITES_DIR}/{current_time}.dat"
 
-        print(f"3) Creating {output_memmap_path} from {most_recent_composite}\
-               and {NEW_MASK_MEMMAP_PATH}")
+        print(f"3) Creating {output_memmap_path} from {most_recent_composite} and {NEW_MASK_MEMMAP_PATH}")
         overlay_videos(background_video_memmap=most_recent_composite,
                        foreground_video_memmap=NEW_MASK_MEMMAP_PATH,
                        output_video_memmap=output_memmap_path,
