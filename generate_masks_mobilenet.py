@@ -13,7 +13,7 @@ from tqdm import tqdm
 from torchvision import models
 import torch
 from torchvision import transforms
-
+from torchvision.models.segmentation import DeepLabV3_MobileNet_V3_Large_Weights
 
 
 def create_masks(path_to_video_file, output_frame_memmaps, output_frame_mask_memmaps):
@@ -23,7 +23,8 @@ def create_masks(path_to_video_file, output_frame_memmaps, output_frame_mask_mem
     TODO: `output_frame_mask_memmaps` are not used and can be removed.
     """
     # Load the DeepLabV3 model pre-trained on COCO dataset
-    model = models.segmentation.deeplabv3_mobilenet_v3_large(pretrained=True).eval()
+    weights = DeepLabV3_MobileNet_V3_Large_Weights.COCO_WITH_VOC_LABELS_V1
+    model = models.segmentation.deeplabv3_mobilenet_v3_large(weights=weights).eval()
 
     # Define the transformation for the input image
     preprocess = transforms.Compose([
@@ -43,9 +44,9 @@ def create_masks(path_to_video_file, output_frame_memmaps, output_frame_mask_mem
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     # Print the debug information
-    print(f"Frame count: {frame_count}")
-    print(f"Frame width: {frame_width}")
-    print(f"Frame height: {frame_height}")
+    # print(f"Frame count: {frame_count}")
+    # print(f"Frame width: {frame_width}")
+    # print(f"Frame height: {frame_height}")
 
     # Create memmap arrays for output
     masked_frames = np.memmap(output_frame_memmaps, dtype='uint8', mode='w+', shape=(frame_count, frame_height, frame_width, 3))
