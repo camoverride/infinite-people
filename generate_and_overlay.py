@@ -49,9 +49,8 @@ if __name__ == "__main__":
                  output_frame_mask_memmaps="_new_video_mask.dat")
     
     # Copy mask to the composites directory.
-    composite_memmap_copy_path = f"{COMPOSITES_DIR}/{NEW_MASK_MEMMAP_PATH}"
-    print(f"Copying {NEW_MASK_MEMMAP_PATH} to {composite_memmap_copy_path}")
-
+    composite_memmap_copy_path = os.path.join(COMPOSITES_DIR, NEW_MASK_MEMMAP_PATH)
+    print(f"--- Copying {NEW_MASK_MEMMAP_PATH} to {composite_memmap_copy_path}")
     shutil.copy(NEW_MASK_MEMMAP_PATH, composite_memmap_copy_path)
 
 
@@ -76,7 +75,7 @@ if __name__ == "__main__":
 
         # Overlay with the previously created composite video
         most_recent_composite = get_most_recent_file(COMPOSITES_DIR)
-        output_memmap_path = f"{COMPOSITES_DIR}/{current_time}.dat"
+        output_memmap_path = os.path.join(COMPOSITES_DIR, current_time) + ".dat"
 
         print(f"3) Creating {output_memmap_path} from {most_recent_composite} and {NEW_MASK_MEMMAP_PATH}")
         overlay_videos(background_video_memmap=most_recent_composite,
