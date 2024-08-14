@@ -128,22 +128,22 @@ def display_memmap_frames(memmap_file, num_frames, height, width, channels=3):
 if __name__ == "__main__":
     # Example usage
 
-    # Get the memmaps for the *first* 10 seconds of video.
-    create_masks(path_to_video_file='walking_10_first.mp4',
-                output_frame_memmaps='walking_10_first.dat',
-                output_frame_mask_memmaps='walking_10_first_mask.dat')
+    # Get the memmaps for the first video
+    create_masks(path_to_video_file='output_video_1.mp4',
+                output_frame_memmaps='output_video_1.dat',
+                output_frame_mask_memmaps='output_video_1_mask.dat')
 
-    display_memmap_frames(memmap_file='walking_10_first.dat',
-                        num_frames=250,
-                        height=1080,
-                        width=1920)
+    display_memmap_frames(memmap_file='output_video_1.dat',
+                        num_frames=322,
+                        height=1440,
+                        width=2560)
 
-    # Get the memmaps for the *last* 10 seconds of video.
-    create_masks(path_to_video_file='walking_10_last.mp4',
-                output_frame_memmaps='walking_10_last.dat',
-                output_frame_mask_memmaps='walking_10_last_mask.dat')
+    # Get the memmaps for the second video
+    create_masks(path_to_video_file='output_video_2.mp4',
+                output_frame_memmaps='output_video_2.dat',
+                output_frame_mask_memmaps='output_video_2_mask.dat')
 
-    display_memmap_frames(memmap_file='walking_10_last.dat',
-                        num_frames=250,
-                        height=1080,
-                        width=1920)
+    display_memmap_frames(memmap_file='output_video_2.dat',
+                        num_frames=321,
+                        height=1440,
+                        width=2560)
